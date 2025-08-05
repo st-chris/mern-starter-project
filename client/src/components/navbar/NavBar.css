@@ -1,0 +1,98 @@
+.navbar {
+  background: rgba(18, 18, 18, 0.85);
+  border-radius: 20px 20px 0px 0px;
+  padding: 1rem 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: saturate(180%) blur(10px);
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  margin-bottom: -1.5rem;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+    border-radius: 0;
+  }
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 70px;
+  margin-right: 1rem;
+}
+
+.hamburger {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  margin-right: 1rem;
+  display: none;
+  cursor: pointer;
+}
+
+.navbar-right a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .navbar-right {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* Base link styling */
+.navbar-right a {
+  color: #ccc;
+  font-family: 'Quicksand', 'Nunito', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  position: relative;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Underline base */
+.navbar-right a::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: crimson;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Underline on hover/focus */
+.navbar-right a:hover::after,
+.navbar-right a:focus::after {
+  width: 100%;
+}
+
+/* Active link styling */
+.navbar-right a.active-link {
+  color: crimson;
+  font-weight: 700;
+}
+
+/* Active underline */
+.navbar-right a.active-link::after {
+  width: 100%;
+}
