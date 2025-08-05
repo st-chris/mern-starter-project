@@ -20,10 +20,10 @@ This repository is a starter template for building full-stack applications using
 
 ## Project Structure
 
-/client # React frontend (TypeScript)
-/server # Express backend API (TypeScript)
-.gitignore
-README.md
+- /client # React frontend (TypeScript)
+- /server # Express backend API (TypeScript)
+- .gitignore
+- README.md
 
 ## Authentication Flow
 
