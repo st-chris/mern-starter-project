@@ -1,14 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import UserSchema, { UserLogin } from '../models/user';
-import { CookieOptions, NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-
-const cookiePreferences: CookieOptions = {
-  httpOnly: true,
-  sameSite: 'lax',
-  path: '/',
-};
+import config from '../utils/config';
 
 const generateToken = (
   userData: { email: string; id: string },
@@ -63,7 +58,7 @@ const login = async (request: Request, response: Response): Promise<void> => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  response.cookie('refreshToken', refreshToken, cookiePreferences);
+  response.cookie('refreshToken', refreshToken, config.cookiePreferences);
 
   response.status(200).send({
     token,
@@ -128,7 +123,7 @@ const refresh = async (
     user.refreshToken = newRefreshToken;
     await user.save();
 
-    response.cookie('refreshToken', newRefreshToken, cookiePreferences);
+    response.cookie('refreshToken', newRefreshToken, config.cookiePreferences);
 
     response.status(200).send({
       token: newToken,
@@ -171,7 +166,7 @@ const logout = async (
       await user.save();
     }
 
-    response.clearCookie('refreshToken', cookiePreferences);
+    response.clearCookie('refreshToken', config.cookiePreferences);
     response.status(204).send();
   } catch (error) {
     next(error);

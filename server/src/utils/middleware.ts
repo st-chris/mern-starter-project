@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import logger from './logger';
 import { ZodSchema } from 'zod';
 import * as jwt from 'jsonwebtoken';
+import config from './config';
 
 // Extend Express Request interface to include 'token'
 declare module 'express-serve-static-core' {
@@ -75,23 +76,6 @@ export const isAuthenticated = (
 export const validate =
   (validationSchema: ZodSchema) =>
   (req: Request, _res: Response, next: NextFunction) => {
-    // try {
-    //   console.log(req.body);
-    //   validationSchema.parse(req.body);
-    //   next();
-    // } catch (error) {
-    //   if (error instanceof ZodError) {
-    //     const msg = error.map((e) => e.message).join(', ');
-    //     next({
-    //       name: 'ValidationError',
-    //       message: error.message,
-    //       // details: error.errors,
-    //     });
-    //   } else {
-    //     next(error);
-    //   }
-    // }
-
     const result = validationSchema.safeParse(req.body);
     if (!result.success) {
       const errorMessages = result.error.issues
@@ -112,7 +96,7 @@ const unknownEndpoint = (_request: Request, response: Response) => {
 
 const errorHandler = (
   error: Error,
-  _request: Request,
+  request: Request,
   response: Response,
   next: NextFunction
 ) => {
@@ -136,6 +120,15 @@ const errorHandler = (
       response.status(401).json({ error: 'Invalid token' });
       return;
     case 'TokenExpiredError':
+      if (
+        request.path === '/api/auth/refresh' ||
+        request.path === '/api/auth/logout'
+      ) {
+        response.clearCookie('refreshToken', config.cookiePreferences);
+        response.status(401).json({ error: 'Refresh token expired' });
+        return;
+      }
+
       response.status(401).json({ error: 'Token expired' });
       return;
 
